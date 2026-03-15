@@ -1,26 +1,34 @@
-# Cybersecurity Incident Management UI
+# Cybersecurity Incident Management UI 🛡️
 
 A full-stack incident tracking platform for security teams, built with a modern React frontend and ASP.NET Core backend.
 
 ---
 
-## Overview
+## Overview 🚀
 
 This project helps teams report, track, and resolve cybersecurity incidents with role-based access:
 
-- **Admin**: full visibility, incident deletion, analyst management
-- **Analyst**: can create incidents, update their own incidents, and is locked from editing once an incident is resolved
+- **Admin** 👑: full visibility, incident deletion, analyst management
+- **Analyst** 🧠: can create incidents, update their own incidents, and is locked from editing once an incident is resolved
 
 ---
 
-## Tech Stack
+## Screenshots 📸
 
-**Frontend**
+![Dashboard](./image.png)
+
+![User Management](./image1.png)
+
+---
+
+## Tech Stack 🧰
+
+**Frontend** 🎨
 - React + TypeScript
 - Vite
 - Tailwind CSS
 
-**Backend**
+**Backend** ⚙️
 - ASP.NET Core (.NET 9)
 - Entity Framework Core
 - SQLite
@@ -28,7 +36,7 @@ This project helps teams report, track, and resolve cybersecurity incidents with
 
 ---
 
-## Quick Start
+## Quick Start ⚡
 
 ### 1. Run Backend
 
@@ -49,7 +57,7 @@ Frontend runs on Vite dev server and proxies API requests to the backend.
 
 ---
 
-## Default Admin Account
+## Default Admin Account 🔐
 
 Seeded automatically at backend startup:
 
@@ -58,7 +66,7 @@ Seeded automatically at backend startup:
 
 ---
 
-## Access Rules
+## Access Rules 📋
 
 | Feature | Admin | Analyst |
 |---|---|---|
@@ -72,7 +80,7 @@ Seeded automatically at backend startup:
 
 ---
 
-## Project Structure
+## Project Structure 🗂️
 
 ```text
 .
@@ -90,8 +98,8 @@ Seeded automatically at backend startup:
 
 ---
 
-## Notes
+## Notes 📝
 
-- Passwords are stored as BCrypt hashes.
-- API caller identity is passed with `X-User-Id` in frontend requests.
-- User management intentionally hides Admin accounts and manages analysts only.
+- Passwords are stored as BCrypt hashes 🔒.
+- API caller identity is passed with `X-User-Id` in frontend requests 📨.
+- User management intentionally hides Admin accounts and manages analysts only 👥.
