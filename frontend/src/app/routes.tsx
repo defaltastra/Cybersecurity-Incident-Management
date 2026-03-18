@@ -9,6 +9,7 @@ import { LoginPage } from './pages/LoginPage';
 import { ReportIncidentPage } from './pages/ReportIncidentPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { UserManagementPage } from './pages/UserManagementPage';
+import { AuditLogsPage } from './pages/AuditLogsPage';
 
 function PublicRoute({ children }: { children: ReactElement }) {
   const { user } = useAuth();
@@ -86,6 +87,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <UserManagementPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'audit-logs',
+        element: (
+          <AdminRoute>
+            <AuditLogsPage />
           </AdminRoute>
         ),
       },

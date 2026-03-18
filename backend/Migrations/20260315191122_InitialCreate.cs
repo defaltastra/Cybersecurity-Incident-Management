@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace backend.Migrations
 {
-    /// <inheritdoc />
+    /// <summary>genere automatiquement.</summary>
     public partial class InitialCreate : Migration
     {
-        /// <inheritdoc />
+        /// <summary>genere automatiquement.</summary>
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -65,7 +65,7 @@ namespace backend.Migrations
                 unique: true);
         }
 
-        /// <inheritdoc />
+        /// <summary>genere automatiquement.</summary>
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

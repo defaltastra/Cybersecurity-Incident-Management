@@ -22,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IncidentService>();
+builder.Services.AddScoped<AuditLogService>();
 
 var app = builder.Build();
 
@@ -30,13 +31,25 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// create the database automatically for the demo project
+// creation auto de la base pour la demo
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     dbContext.Database.Migrate();
+    dbContext.Database.ExecuteSqlRaw(@"
+        CREATE TABLE IF NOT EXISTS AuditLogs (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ActorUserId INTEGER NULL,
+            ActorEmail TEXT NOT NULL DEFAULT '',
+            Action TEXT NOT NULL,
+            EntityType TEXT NOT NULL,
+            EntityId INTEGER NULL,
+            Details TEXT NOT NULL DEFAULT '',
+            CreatedAt TEXT NOT NULL
+        );
+    ");
 
-    // Ensure there is a default admin for first-time access.
+    // cree un admin par defaut au premier lancement
     var adminEmail = "admin@admin.com";
     var hasAdmin = dbContext.Users.Any(user => user.Email == adminEmail);
     if (!hasAdmin)

@@ -6,6 +6,6 @@ public class UpdateProfileRequest
 
     public string Email { get; set; } = string.Empty;
 
-    // Optional — leave empty to keep existing password
+    // optionnel: laisser vide pour garder le mot de passe actuel
     public string? NewPassword { get; set; }
 }

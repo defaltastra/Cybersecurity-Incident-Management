@@ -13,6 +13,8 @@ public class AppDbContext : DbContext
 
     public DbSet<Incident> Incidents => Set<Incident>();
 
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -1,4 +1,5 @@
 import type {
+  AuditLog,
   Incident,
   CreateIncidentRequest,
   UpdateIncidentRequest,
@@ -138,4 +139,11 @@ export async function deleteUser(id: number): Promise<void> {
     const text = await res.text().catch(() => res.statusText);
     throw new Error(text || `HTTP ${res.status}`);
   }
+}
+
+export async function getAuditLogs(): Promise<AuditLog[]> {
+  const res = await fetch(`${BASE}/audit-logs`, {
+    headers: userIdHeader(),
+  });
+  return handleResponse<AuditLog[]>(res);
 }

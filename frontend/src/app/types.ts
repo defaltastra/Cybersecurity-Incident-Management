@@ -56,3 +56,14 @@ export interface UpdateProfileRequest {
   email: string;
   newPassword?: string;
 }
+
+export interface AuditLog {
+  id: number;
+  actorUserId?: number;
+  actorEmail: string;
+  action: string;
+  entityType: string;
+  entityId?: number;
+  details: string;
+  createdAt: string;
+}

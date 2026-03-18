@@ -18,6 +18,7 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
+        // verifie les champs obligatoires
         if (string.IsNullOrWhiteSpace(request.Name) ||
             string.IsNullOrWhiteSpace(request.Email) ||
             string.IsNullOrWhiteSpace(request.Password))
@@ -37,6 +38,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
+        // verifie les champs obligatoires
         if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
             return BadRequest(new { message = "email and password are required" });
@@ -54,6 +56,7 @@ public class AuthController : ControllerBase
     [HttpPut("profile/{id:int}")]
     public async Task<IActionResult> UpdateProfile(int id, [FromBody] UpdateProfileRequest request)
     {
+        // met a jour le profil utilisateur
         if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Email))
         {
             return BadRequest(new { message = "name and email are required" });

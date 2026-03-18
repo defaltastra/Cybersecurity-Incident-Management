@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router';
-import { Shield, LayoutDashboard, AlertTriangle, FileText, Settings, Users } from 'lucide-react';
+import { Shield, LayoutDashboard, AlertTriangle, FileText, Settings, Users, ClipboardList } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export function Sidebar() {
@@ -11,7 +11,12 @@ export function Sidebar() {
     { path: '/incidents', icon: AlertTriangle, label: 'Incidents' },
     { path: '/report', icon: FileText, label: 'Report Incident' },
     { path: '/settings', icon: Settings, label: 'Settings' },
-    ...(user?.role === 'Admin' ? [{ path: '/users', icon: Users, label: 'User Management' }] : []),
+    ...(user?.role === 'Admin'
+      ? [
+          { path: '/users', icon: Users, label: 'User Management' },
+          { path: '/audit-logs', icon: ClipboardList, label: 'Audit Logs' },
+        ]
+      : []),
   ];
 
   return (

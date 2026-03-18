@@ -8,14 +8,17 @@ namespace backend.Controllers;
 public class UsersController : ControllerBase
 {
     private readonly AuthService _authService;
+    private readonly AuditLogService _auditLogService;
 
-    public UsersController(AuthService authService)
+    public UsersController(AuthService authService, AuditLogService auditLogService)
     {
         _authService = authService;
+        _auditLogService = auditLogService;
     }
 
     private async Task<(bool IsValid, int UserId, string? Role)> GetCallerAsync()
     {
+        // valide l'appelant via le header et le role
         if (!Request.Headers.TryGetValue("X-User-Id", out var value))
         {
             return (false, 0, null);
@@ -38,6 +41,7 @@ public class UsersController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
+        // liste les analystes (admin uniquement)
         var caller = await GetCallerAsync();
         if (!caller.IsValid)
         {
@@ -56,6 +60,7 @@ public class UsersController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
+        // supprime un analyste et ecrit un log
         var caller = await GetCallerAsync();
         if (!caller.IsValid)
         {
@@ -77,6 +82,13 @@ public class UsersController : ControllerBase
         {
             return NotFound(new { message = result.Message });
         }
+
+        await _auditLogService.LogAsync(
+            caller.UserId,
+            "analyst_deleted",
+            "user",
+            id,
+            $"Deleted analyst account with id {id}");
 
         return Ok(new { message = result.Message });
     }

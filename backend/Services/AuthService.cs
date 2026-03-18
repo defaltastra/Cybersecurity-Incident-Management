@@ -63,7 +63,7 @@ public class AuthService
 
         var newEmail = request.Email.Trim().ToLower();
 
-        // Check if the new email is taken by a different user
+        // verifie si le nouvel email est deja utilise
         var emailTaken = await _dbContext.Users
             .AnyAsync(u => u.Email == newEmail && u.Id != id);
         if (emailTaken)
@@ -114,7 +114,7 @@ public class AuthService
             return (false, "user not found");
         }
 
-        // Incidents reference users with Restrict delete behavior, so remove the user's incidents first.
+        // supprime d'abord les incidents lies a l'utilisateur
         var incidents = _dbContext.Incidents.Where(incident => incident.ReportedByUserId == id);
         _dbContext.Incidents.RemoveRange(incidents);
 

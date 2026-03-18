@@ -10,15 +10,18 @@ public class IncidentController : ControllerBase
 {
     private readonly IncidentService _incidentService;
     private readonly AuthService _authService;
+    private readonly AuditLogService _auditLogService;
 
-    public IncidentController(IncidentService incidentService, AuthService authService)
+    public IncidentController(IncidentService incidentService, AuthService authService, AuditLogService auditLogService)
     {
         _incidentService = incidentService;
         _authService = authService;
+        _auditLogService = auditLogService;
     }
 
     private bool TryGetCallerUserId(out int userId)
     {
+        // lit l'identifiant utilisateur depuis le header
         userId = 0;
         if (!Request.Headers.TryGetValue("X-User-Id", out var value))
         {
@@ -31,6 +34,7 @@ public class IncidentController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
+        // charge les incidents selon le role
         if (!TryGetCallerUserId(out var callerUserId))
         {
             return Unauthorized(new { message = "missing X-User-Id header" });
@@ -72,6 +76,7 @@ public class IncidentController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateIncidentRequest request)
     {
+        // cree un incident et ecrit un log
         if (!TryGetCallerUserId(out var callerUserId))
         {
             return Unauthorized(new { message = "missing X-User-Id header" });
@@ -99,12 +104,20 @@ public class IncidentController : ControllerBase
             return BadRequest(new { message = result.Message });
         }
 
+        await _auditLogService.LogAsync(
+            callerUserId,
+            "incident_created",
+            "incident",
+            result.Incident!.Id,
+            $"Created incident '{result.Incident.Title}'");
+
         return CreatedAtAction(nameof(GetById), new { id = result.Incident!.Id }, result.Incident);
     }
 
     [HttpPatch("{id:int}/status")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateIncidentStatusRequest request)
     {
+        // met a jour le statut
         if (!TryGetCallerUserId(out var callerUserId))
         {
             return Unauthorized(new { message = "missing X-User-Id header" });
@@ -134,12 +147,20 @@ public class IncidentController : ControllerBase
                 : NotFound(new { message = result.Message });
         }
 
+        await _auditLogService.LogAsync(
+            callerUserId,
+            "incident_status_updated",
+            "incident",
+            result.Incident!.Id,
+            $"Updated status to '{result.Incident.Status}'");
+
         return Ok(new { message = result.Message, incident = result.Incident });
     }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateIncidentRequest request)
     {
+        // met a jour les details d'un incident
         if (!TryGetCallerUserId(out var callerUserId))
         {
             return Unauthorized(new { message = "missing X-User-Id header" });
@@ -172,12 +193,20 @@ public class IncidentController : ControllerBase
             return BadRequest(new { message = result.Message });
         }
 
+        await _auditLogService.LogAsync(
+            callerUserId,
+            "incident_updated",
+            "incident",
+            result.Incident!.Id,
+            $"Updated incident details for '{result.Incident.Title}'");
+
         return Ok(new { message = result.Message, incident = result.Incident });
     }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {
+        // supprime un incident (admin uniquement)
         if (!TryGetCallerUserId(out var callerUserId))
         {
             return Unauthorized(new { message = "missing X-User-Id header" });
@@ -194,6 +223,13 @@ public class IncidentController : ControllerBase
         {
             return NotFound(new { message = "incident not found" });
         }
+
+        await _auditLogService.LogAsync(
+            callerUserId,
+            "incident_deleted",
+            "incident",
+            id,
+            $"Deleted incident with id {id}");
 
         return Ok(new { message = "incident deleted successfully" });
     }
