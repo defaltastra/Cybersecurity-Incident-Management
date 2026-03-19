@@ -36,16 +36,45 @@ This project helps teams report, track, and resolve cybersecurity incidents with
 
 ---
 
-## Quick Start ⚡
+## First-Time Setup ⚡
 
-### 1. Run Backend
+### 1. Prerequisites
+
+Install these first:
+
+- `git`
+- `.NET SDK 9`
+- `Node.js 20+` and `npm`
+
+Check versions:
+
+```bash
+dotnet --version
+node --version
+npm --version
+```
+
+### 2. Get the project
+
+```bash
+git clone https://github.com/defaltastra/Cybersecurity-Incident-Management
+cd "Cybersecurity Incident Management UI"
+```
+
+### 3. Backend setup (first run)
 
 ```bash
 cd backend
+dotnet restore
+dotnet build
 dotnet run
 ```
 
-### 2. Run Frontend
+Backend starts on the ASP.NET port shown in terminal (usually `http://localhost:5038`).
+
+### 4. Frontend setup (first run)
+
+Open a new terminal:
 
 ```bash
 cd frontend
@@ -53,7 +82,26 @@ npm install
 npm run dev
 ```
 
-Frontend runs on Vite dev server and proxies API requests to the backend.
+Frontend usually runs on `http://localhost:5173`.
+
+### 5. Login
+
+Use the seeded admin account:
+
+- `admin@admin.com`
+- `admin123`
+
+### 6. If you need a clean database
+
+From project root:
+
+```bash
+rm backend/cybersecurity_incident_management.db
+cd backend
+dotnet run
+```
+
+This recreates the database and reseeds the default admin.
 
 ---
 
